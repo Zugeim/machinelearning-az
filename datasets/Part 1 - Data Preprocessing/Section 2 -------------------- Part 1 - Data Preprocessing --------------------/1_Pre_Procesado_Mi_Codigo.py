@@ -19,22 +19,26 @@ X = dataset.iloc[:,:-1].values
 y = dataset.iloc[:, 3].values
 
 # Tratamiento de los NAs
-from sklearn.preprocessing import Imputer
-imputer = Imputer(missing_values = "NaN", strategy="mean", axis=0)
+from sklearn.impute import SimpleImputer
+imputer = SimpleImputer(missing_values = np.nan, strategy="mean")
 imputer = imputer.fit(X[:,1:3])
 X[:, 1:3] = imputer.transform(X[:,1:3])
 
 # Codificar datos categóricos
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-labelencoder_X = LabelEncoder()
-X[:, 0] = labelencoder_X.fit_transform(X[:, 0])
-onehotencoder = OneHotEncoder(categorical_features=[0])
-X = onehotencoder.fit_transform(X).toarray()
-labelencoder_y = LabelEncoder()
-y = labelencoder_X.fit_transform(y)
+from sklearn import preprocessing
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+le_X = preprocessing.LabelEncoder()
+X[:, 0] = le_X.fit_transform(X[:, 0])
+ct = ColumnTransformer(
+    [('one_hot_encoder', OneHotEncoder(categories='auto'), [0])],
+    remainder='passthrough')
+X = np.array(ct.fit_transform(X), dtype=np.float)
+le_y = preprocessing.LabelEncoder()
+y = le_y.fit_transform(y)
 
 # Dividir el data set en training y testing
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0) 
 
 # Escalado de variables
