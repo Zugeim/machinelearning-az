@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 14 09:07:36 2023
+Created on Tue Feb 14 10:08:20 2023
 
 @author: Imanol
 """
 
-# ANALALISIS DE COMPONENENTE PRINCIPALES (ACP o PCA)
+# ANÁLISIS DISCRIMINANTE LINEAL (LDA)
 
 # Importar las librerías
 import numpy as np
@@ -28,12 +28,12 @@ sc_X = StandardScaler()
 X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.transform(X_test)
 
-# Reducir la dimension del dataset con ACP ------------------------------------------------
-from sklearn.decomposition import PCA
-pca = PCA(n_components= 2)
-X_train = pca.fit_transform(X_train)
-X_test = pca.transform(X_test)
-expleined_variance = pca.explained_variance_ratio_
+# Reducir la dimension del dataset con LDA +++++++++++++++++++++++++++++++++++++++++++++++++
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+lda = LDA(n_components= 2)
+X_train = lda.fit_transform(X_train, y_train)
+X_test = lda.transform(X_test)
+
 
 # Ajustar el modelo de Regresión Logística en el Conjunto de Entrenamiento
 from sklearn.linear_model import LogisticRegression
@@ -60,10 +60,10 @@ plt.xlim(X1.min(), X1.max())
 plt.ylim(X2.min(), X2.max())
 for i, j in enumerate(np.unique(y_set)):
     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
-                c = ListedColormap(('red', 'green'))(i), label = j)
+                c = ListedColormap(('red', 'green', 'blue'))(i), label = j)
 plt.title('Clasificador (Conjunto de Train)')
-plt.xlabel('CP1')
-plt.ylabel('CP2')
+plt.xlabel('DL1')
+plt.ylabel('DL2')
 plt.legend()
 plt.show()
 
@@ -77,9 +77,9 @@ plt.xlim(X1.min(), X1.max())
 plt.ylim(X2.min(), X2.max())
 for i, j in enumerate(np.unique(y_set)):
     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
-                c = ListedColormap(('red', 'green'))(i), label = j)
+                c = ListedColormap(('red', 'green', 'blue'))(i), label = j)
 plt.title('Clasificador (Conjunto de Test)')
-plt.xlabel('CP1')
-plt.ylabel('CP2')
+plt.xlabel('DL1')
+plt.ylabel('DL2')
 plt.legend()
 plt.show()
