@@ -19,8 +19,8 @@ training_set = subset(dataset, split == TRUE)
 testing_set = subset(dataset, split == FALSE)
 
 # Escalado de variables
-training_set[,1:2] = scale(training_set[,1:2])
-testing_set[,1:2] = scale(testing_set[,1:2])
+training_set[,-11] = scale(training_set[,-11])
+testing_set[,-11] = scale(testing_set[,-11])
 
 
 # Ajustar el clasificador en el Conjunto de Entrenamiento
